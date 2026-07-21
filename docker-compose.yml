@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: anthology
+      POSTGRES_PASSWORD: anthology
+      POSTGRES_DB: anthology
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U anthology"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Gateway / BFF - the only public backend service.
+  # Runs Alembic migrations on startup, then serves the API.
+  gateway:
+    build: ./gateway
+    env_file: .env
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  extraction:
+    build: ./extraction
+    env_file: .env
+    expose: ["8000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  search:
+    build: ./search
+    env_file: .env
+    expose: ["8000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  web:
+    build: ./web
+    ports: ["5173:5173"]
+    environment:
+      VITE_API_BASE: http://localhost:8000
+    depends_on: [gateway]
+
+volumes:
+  pgdata:
