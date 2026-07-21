@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Warm "paper" light theme - the reading sanctuary. */
+  --paper: 245 241 234;
+  --surface: 255 253 249;
+  --surface-2: 239 234 225;
+  --border: 226 219 208;
+  --ink: 28 25 23;
+  --muted: 120 113 108;
+  --accent: 158 65 45; /* refined clay / terracotta */
+  --accent-ink: 255 253 249;
+  --highlight: 244 219 160; /* soft amber marker */
+}
+
+.dark {
+  --paper: 23 22 20;
+  --surface: 32 30 27;
+  --surface-2: 42 39 35;
+  --border: 58 53 48;
+  --ink: 237 232 224;
+  --muted: 165 157 148;
+  --accent: 204 128 96;
+  --accent-ink: 23 22 20;
+  --highlight: 120 96 46;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+  font-feature-settings: "kern", "liga";
+}
+
+::selection {
+  background: rgb(var(--highlight) / 0.55);
+}
+
+/* Thin, unobtrusive scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--border)) transparent;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2
+      text-sm font-medium transition-colors duration-150
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60
+      focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:opacity-50
+      disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-accent-ink hover:opacity-90;
+  }
+  .btn-ghost {
+    @apply btn text-ink hover:bg-surface-2;
+  }
+  .btn-outline {
+    @apply btn border border-border text-ink hover:bg-surface-2;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-border
+      bg-surface px-2.5 py-0.5 text-xs text-muted transition-colors;
+  }
+  .chip-active {
+    @apply border-accent/40 bg-accent/10 text-accent;
+  }
+  .card {
+    @apply rounded-xl border border-border bg-surface shadow-card transition
+      duration-200;
+  }
+}
+
+/* Reader typography - the centerpiece (spec §9). */
+.prose-reader {
+  @apply font-serif text-ink;
+  font-size: 1.2rem;
+  line-height: 1.75;
+}
+.prose-reader p {
+  margin: 1.25em 0;
+}
+.prose-reader h1,
+.prose-reader h2,
+.prose-reader h3 {
+  @apply font-serif font-semibold text-ink;
+  line-height: 1.25;
+  margin: 1.8em 0 0.6em;
+}
+.prose-reader h2 { font-size: 1.6rem; }
+.prose-reader h3 { font-size: 1.3rem; }
+.prose-reader a {
+  @apply text-accent underline underline-offset-2 decoration-accent/40;
+}
+.prose-reader blockquote {
+  @apply border-l-2 border-accent/50 pl-5 italic text-muted;
+  margin: 1.5em 0;
+}
+.prose-reader img {
+  @apply my-8 rounded-lg;
+}
+.prose-reader ul,
+.prose-reader ol {
+  margin: 1.2em 0;
+  padding-left: 1.5em;
+}
+.prose-reader li { margin: 0.4em 0; }
+.prose-reader ul { list-style: disc; }
+.prose-reader ol { list-style: decimal; }
+.prose-reader pre {
+  @apply my-6 overflow-x-auto rounded-lg bg-surface-2 p-4 font-sans text-sm;
+}
+.prose-reader mark,
+.prose-reader .hl {
+  background: rgb(var(--highlight) / 0.6);
+  @apply rounded-sm px-0.5 text-ink;
+}
+
+/* Search snippet marks. */
+.snippet mark {
+  background: rgb(var(--highlight) / 0.6);
+  @apply rounded-sm px-0.5 font-medium text-ink;
+}
